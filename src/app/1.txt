@@ -1,0 +1,217 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+
+
+import { AppComponent } from './app.component';
+import { AppAsideComponent } from './components/app-aside/app-aside.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SidebarFooterComponent } from './components/sidebar-footer/sidebar-footer.component';
+import { SidebarFormComponent } from './components/sidebar-form/sidebar-form.component';
+import { SidebarHeaderComponent } from './components/sidebar-header/sidebar-header.component';
+import { SidebarMinimizerComponent } from './components/sidebar-minimizer/sidebar-minimizer.component';
+import { SidebarNavComponent } from './components/sidebar-nav/sidebar-nav.component';
+import { SidebarNavDropdownComponent } from './components/sidebar-nav/sidebar-nav.component';
+import { FullLayoutComponent } from './containers/full-layout/full-layout.component';
+import { SimpleLayoutComponent } from './containers/simple-layout/simple-layout.component';
+
+import { AsideDirective } from './directives/aside.directive';
+import { NavDropdownDirective } from './directives/nav-dropdown.directive';
+import { NavDropdownToggleDirective } from './directives/nav-dropdown.directive';
+import { ReplaceDirective } from './directives/replace.directive';
+import { SidebarToggleDirective } from './directives/sidebar.directive';
+import { SidebarMinimizeDirective } from './directives/sidebar.directive';
+import { BrandMinimizeDirective } from './directives/sidebar.directive';
+import { MobileSidebarToggleDirective } from './directives/sidebar.directive';
+import { SidebarOffCanvasCloseDirective } from './directives/sidebar.directive';
+
+// Import routing module
+import { AppRoutingModule } from './app-routing/app-routing.module';
+
+// Import 3rd party components
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ChartsModule } from 'ng2-charts';
+
+const APP_COMPONENTS = [
+  AppComponent,
+  AppAsideComponent,
+  BreadcrumbsComponent,
+  FooterComponent,
+  HeaderComponent,
+  SidebarComponent,
+  SidebarFooterComponent,
+  SidebarFormComponent,
+  SidebarHeaderComponent,
+  SidebarMinimizerComponent,
+  SidebarNavComponent,
+  SidebarNavDropdownComponent
+];
+
+const APP_DIRECTIVES = [
+  AsideDirective,
+  NavDropdownDirective,
+  NavDropdownToggleDirective,
+  ReplaceDirective,
+  SidebarToggleDirective,
+  SidebarMinimizeDirective,
+  BrandMinimizeDirective,
+  MobileSidebarToggleDirective,
+  SidebarOffCanvasCloseDirective
+];
+
+const APP_CONTAINERS = [
+  FullLayoutComponent,
+  SimpleLayoutComponent
+];
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    ...APP_CONTAINERS,
+    ...APP_COMPONENTS,
+    ...APP_DIRECTIVES
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    ChartsModule
+  ],
+  providers: [{
+    provide: LocationStrategy,
+    useClass: HashLocationStrategy
+  }],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule { }
+
+
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+// import { HttpModule } from '@angular/http';
+// import { HttpHandler } from '@angular/common/http';
+
+import { AppComponent } from './app.component';
+// Import containers
+import {
+  FullLayoutComponent,
+  SimpleLayoutComponent
+} from './containers';
+
+const APP_CONTAINERS = [
+  FullLayoutComponent,
+  SimpleLayoutComponent
+];
+
+// Import components
+import {
+  AppAsideComponent,
+  BreadcrumbsComponent,
+  FooterComponent,
+  HeaderComponent,
+  SidebarComponent,
+  SidebarFooterComponent,
+  SidebarFormComponent,
+  SidebarHeaderComponent,
+  SidebarMinimizerComponent,
+  APP_SIDEBAR_NAV
+} from './components';
+
+const APP_COMPONENTS = [
+  AppComponent,
+  AppAsideComponent,
+  BreadcrumbsComponent,
+  FooterComponent,
+  HeaderComponent,
+  SidebarComponent,
+  SidebarFooterComponent,
+  SidebarFormComponent,
+  SidebarHeaderComponent,
+  SidebarMinimizerComponent,
+  APP_SIDEBAR_NAV
+];
+
+// Import directives
+import {
+  AsideDirective,
+  NAV_DROPDOWN_DIRECTIVES,
+  ReplaceDirective,
+  SIDEBAR_TOGGLE_DIRECTIVES,
+  CUSTOM_VALIDATORS
+} from './directives';
+
+const APP_DIRECTIVES = [
+  AsideDirective,
+  NAV_DROPDOWN_DIRECTIVES,
+  ReplaceDirective,
+  SIDEBAR_TOGGLE_DIRECTIVES,
+  CUSTOM_VALIDATORS
+];
+
+// Import routing module
+import { AppRoutingModule } from './app-routing';
+
+// Import 3rd party components
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ChartsModule } from 'ng2-charts';
+
+// Import Services
+import { AuthGuard } from './views/auth/auth.guard';
+import { AuthService } from './views/auth/auth.service';
+import { MyErrorHandler } from './services/error.handler';
+import { HttpService } from './services/http.service';
+import { HttpClient } from '@angular/common/http';
+import { ErrorHandler } from '@angular/core';
+// import { ErrorInterceptor } from './services/error.interceptor';
+// import {HTTP_INTERCEPTORS} from '@angular/common/http';
+
+
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    ...APP_CONTAINERS,
+    ...APP_COMPONENTS,
+    ...APP_DIRECTIVES
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    AppRoutingModule,
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    ChartsModule
+  ],
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: PathLocationStrategy,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: MyErrorHandler,
+    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: ErrorInterceptor,
+    // },
+
+    AuthGuard,
+    AuthService,
+    HttpService,
+    HttpClient
+    // ErrorInterceptor
+  ],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule { }

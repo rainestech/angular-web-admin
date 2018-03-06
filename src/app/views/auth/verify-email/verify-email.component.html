@@ -1,0 +1,59 @@
+<div class="app flex-row align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card-group">
+            <div class="card p-4">
+              <div class="card-body">
+                <h1>Email Verification</h1>
+                <p class="text-muted">Confirm your Email</p>
+                <form name="form" (ngSubmit)="f.form.valid && verify()" #f="ngForm">
+
+                  <div *ngIf="loginRe" class="alert alert-success">
+                    <p>{{message}}</p>
+                    <p>Proceed to
+                        <button type="button" (click)="login()" class="btn btn-link px-0">Login</button>
+                    </p>
+                  </div>
+
+                  <div *ngIf="resendRe" class="alert alert-danger">
+                    <p>{{message}}</p>
+                    <p>Get a new
+                        <button type="button" (click)="resend()" class="btn btn-link px-0">Verification Code</button>
+                    </p>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="icon-user"></i></span>
+                      <input type="text" class="form-control" placeholder="Enter email" [(ngModel)]="model.email" #email="ngModel" name="email" required pattern="[^ @]*@[^ @]*" >
+                    </div>
+                    <span *ngIf="f.submitted && !email.valid" class="help-block text-danger">Invalid email (Email is requires)</span>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="icon-user"></i></span>
+                      <input type="text" class="form-control" placeholder="Enter Verification Code" [(ngModel)]="model.verifyEmail" #verifyEmail="ngModel" name="verifyEmail" required >
+                    </div>
+                    <span *ngIf="error" class="help-block text-danger">{{ error }}</span>
+                    <span *ngIf="f.submitted && !verifyEmail.valid" class="help-block text-danger">Wrong Verification Code</span>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6">
+                      <button type="submit" class="btn btn-primary px-4" [disabled]="f.invalid" [disabled]="success" >Verify</button>
+                      <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    </div>
+                    <div class="col-6 text-right">
+                      <button (click)="login()" type="button" class="btn btn-link px-0">Login?</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

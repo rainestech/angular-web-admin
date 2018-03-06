@@ -1,0 +1,164 @@
+<div id="ui-view" style="opacity: 1;">
+  <div class="animated fadeIn">
+    <div class="email-app mb-4">
+      <nav>
+        <button class="btn btn-danger btn-block">New Email</button>
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" (click)=inbox()><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)=starred() ><i class="fa fa-star"></i> Stared</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)=sent() ><i class="fa fa-rocket"></i> Sent</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)=trash() ><i class="fa fa-trash-o"></i> Trash</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)=important() ><i class="fa fa-bookmark"></i> Important<span class="badge badge-info">5</span></a>
+          </li>
+        </ul>
+      </nav>
+      <main class="listTollBar? inbox : message">
+        <div class="toolbar">
+          <div class="btn-group">
+            <button *ngIf=listToolBar type="button" (click)=checkAll() class="btn btn-light">
+              <span *ngIf=!checked title="Select All" class="fa fa-square-o"></span>
+              <span *ngIf=checked title="Deselect All" class="fa fa-check-square-o"></span>
+            </button>
+            <button type="button" *ngIf=!listToolBar (click)=inbox() class="btn btn-light">
+              <span class="fa fa-arrow-left">  Back to Inbox</span>
+            </button>
+            <button type="button" title="Mark Read" (click)=read(curMailId) class="btn btn-light">
+              <span class="fa fa-envelope-open-o"></span>
+            </button>
+            <button type="button" title="Mark UnRead" (click)=log() class="btn btn-light">
+              <span class="fa fa-envelope-o"></span>
+            </button>
+            <button type="button" title="Star" (click)=star(curMailId) class="btn btn-light">
+              <span class="fa fa-star"></span>
+            </button>
+            <button type="button" title="Unstar" (click)=unStar(curMailId) class="btn btn-light">
+              <span class="fa fa-star-o"></span>
+            </button>
+            <button type="button" title="Spam" (click)=spam(curMailId) class="btn btn-light">
+              <span class="fa fa-warning"></span>
+            </button>
+          </div>
+          <div class="btn-group" *ngIf=!listToolBar>
+            <button (click)="reply = !reply" type="button" class="btn btn-light">
+              <span class="fa fa-mail-reply"></span>
+            </button>
+            <button type="button" class="btn btn-light">
+              <span class="fa fa-mail-forward"></span>
+            </button>
+          </div>
+          <button type="button" title="Trash" (click)=trash() class="btn btn-light">
+            <span class="fa fa-trash-o"></span>
+          </button>
+          <!-- <div class="btn-group">
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+              <span class="fa fa-tags"></span>
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">add label <span class="badge badge-danger"> Home</span></a>
+              <a class="dropdown-item" href="#">add label <span class="badge badge-info"> Job</span></a>
+              <a class="dropdown-item" href="#">add label <span class="badge badge-success"> Clients</span></a>
+              <a class="dropdown-item" href="#">add label <span class="badge badge-warning"> News</span></a>
+            </div>
+          </div> -->
+          <div class="btn-group float-right" *ngIf=listToolBar>
+            <button [disabled]="!links.first" (click)=navList(links.first) type="button" class="btn btn-light">
+              <span class="fa fa-angle-double-left"></span>
+            </button>
+            <button [disabled]="!links.prev" (click)=navList(links.prev) type="button" class="btn btn-light">
+            <span class="fa fa-chevron-left"></span>
+            </button>
+            <button [disabled]="!links.next" (click)=navList(links.next) type="button" class="btn btn-light">
+              <span class="fa fa-chevron-right"></span>
+            </button>
+            <button [disabled]="!links.first" (click)=navList(links.last) type="button" class="btn btn-light">
+              <span class="fa fa-angle-double-right"></span>
+            </button>
+          </div>
+        </div>
+
+        <ul class="messages" *ngIf=listToolBar>
+          <li *ngFor="let mail of mails" class="message unread">
+            <div class="actions">
+              <input type="checkbox" [checked]=checked (change)="listCheck($event, mail.id)" value="mail.id" class="action fa fa-square-o">
+              <!-- <input type="checkbox" class="action fa fa-star-o"> -->
+              <span *ngIf="mail.star" class="action"><i class="fa fa-star"></i></span>
+              <span *ngIf="!mail.star" class="action"><i class="fa fa-star-o"></i></span>
+            </div>
+            <a (click)=readMsg(mail.id) >
+              <div class="header">
+                <span class="from">{{ mail.sender }}</span>
+                <span class="date">
+                  <span class="fa fa-paper-clip"></span> {{ mail.created_at }}</span>
+              </div>
+              <div class="title">
+                {{ mail.subject }}
+              </div>
+              <div class="description">
+                {{ (mail["body-plain"] | slice:0:99) +'..' }}
+              </div>
+            </a>
+          </li>
+        </ul>
+
+        <div class="details" *ngIf=!listToolBar>
+          <div class="title">{{ curMail.subject }}</div>
+          <div class="header">
+            <img class="avatar" src="img/avatars/7.jpg">
+            <div class="from">
+              <span>Lukasz Holeczek</span>
+              {{ curMail.sender }}
+            </div>
+            <div class="date">{{curMail.created_at}}</div>
+          </div>
+          <div class="content" [innerHTML]="curMail['stripped-html']">
+            <!-- {{ curMail['stripped-html'] }} -->
+          </div>
+          <!-- <div class="attachments">
+            <div class="attachment">
+              <span class="badge badge-danger">zip</span> <b>bootstrap.zip</b> <i>(2,5MB)</i>
+              <span class="menu">
+                <a href="#" class="fa fa-search"></a>
+                <a href="#" class="fa fa-share"></a>
+                <a href="#" class="fa fa-cloud-download"></a>
+              </span>
+            </div>
+            <div class="attachment">
+              <span class="badge badge-info">txt</span> <b>readme.txt</b> <i>(7KB)</i>
+              <span class="menu">
+                <a href="#" class="fa fa-search"></a>
+                <a href="#" class="fa fa-share"></a>
+                <a href="#" class="fa fa-cloud-download"></a>
+              </span>
+            </div>
+            <div class="attachment">
+              <span class="badge badge-success">xls</span> <b>spreadsheet.xls</b> <i>(984KB)</i>
+              <span class="menu">
+                <a href="#" class="fa fa-search"></a>
+                <a href="#" class="fa fa-share"></a>
+                <a href="#" class="fa fa-cloud-download"></a>
+              </span>
+            </div>
+          </div> -->
+          <form class="mt-4" *ngIf=reply name="form" (ngSubmit)="f.form.valid && msgReply(curMail.id)" #f="ngForm">
+            <div class="form-group">
+              <textarea class="form-control" [froalaEditor]="fOptions" [(froalaModel)]="editorContent" placeholder="your reply text here..." rows=8 required ></textarea>
+            </div>
+            <div class="form-group">
+              <button tabindex="3" type="submit" class="btn btn-success">Send message</button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
